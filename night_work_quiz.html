@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>わたしに向いてるお店はどこ？診断</title>
+<style>
+  :root{
+    --pink-bg:#FBEAF0; --pink-border:#ED93B1; --pink-main:#D4537E;
+    --pink-deep:#993556; --pink-darkest:#72243E; --pink-text:#4B1528;
+    --pink-soft:#F4C0D1; --line-green:#06C755;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; padding:20px 12px;
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    background:#FFF5F9; color:var(--pink-text);
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:380px;margin:0 auto;}
+  .card-intro,.card-result{
+    text-align:center; background:var(--pink-bg);
+    border:2px solid var(--pink-border); border-radius:16px; padding:24px 20px;
+  }
+  .badge{
+    display:inline-block; background:var(--pink-main); color:#fff;
+    font-size:12px; font-weight:600; letter-spacing:1px;
+    border-radius:999px; padding:5px 14px; margin:10px 0 8px;
+  }
+  .title{font-size:21px;font-weight:700;color:var(--pink-darkest);margin-bottom:6px;line-height:1.5;}
+  .lead{font-size:13px;color:var(--pink-deep);line-height:1.7;margin:0 0 18px;}
+  .btn-main{
+    background:var(--pink-main); color:#fff; border:none; border-radius:999px;
+    padding:13px 36px; font-size:15px; font-weight:600; cursor:pointer;
+  }
+  .btn-main:active{transform:scale(.98);}
+  #quiz{display:none;}
+  .topbar{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .progress{flex:1;height:8px;background:var(--pink-bg);border-radius:999px;overflow:hidden;}
+  .progress > div{height:100%;width:9%;background:var(--pink-main);border-radius:999px;transition:width .3s;}
+  .counter{font-size:12px;color:var(--pink-deep);flex-shrink:0;}
+  .qtext{font-size:17px;font-weight:700;color:var(--pink-text);line-height:1.6;margin:14px 0 18px;min-height:52px;}
+  .opts{display:flex;flex-direction:column;gap:10px;}
+  .opt{
+    background:#fff; border:1.5px solid var(--pink-soft); border-radius:14px;
+    padding:14px 16px; font-size:14px; color:var(--pink-darkest); text-align:left;
+    cursor:pointer; font-family:inherit; transition:all .15s;
+  }
+  .opt:hover{background:var(--pink-bg);border-color:var(--pink-main);}
+  #result{display:none;}
+  .result-type{font-size:25px;font-weight:700;color:var(--pink-darkest);margin-bottom:14px;}
+  .result-emoji{font-size:13px;color:var(--pink-deep);margin-bottom:2px;}
+  .result-icon{font-size:40px;margin-bottom:4px;}
+  .result-desc{
+    font-size:14px;color:var(--pink-text);line-height:1.8;text-align:left;
+    background:#fff;border-radius:12px;padding:14px 16px;
+  }
+  .label{font-size:12px;color:var(--pink-deep);letter-spacing:2px;margin-bottom:8px;}
+  .btn-line{
+    display:block;margin-top:18px;background:var(--line-green);color:#fff;
+    text-decoration:none;border-radius:999px;padding:14px;font-size:15px;font-weight:600;
+  }
+  .line-note{font-size:11px;color:var(--pink-deep);margin-top:10px;line-height:1.6;}
+  .btn-again{
+    margin-top:14px;background:none;border:none;color:var(--pink-deep);
+    font-size:13px;cursor:pointer;text-decoration:underline;
+  }
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 class="sr-only">ナイトワーク適性診断</h1>
+
+  <div id="intro" class="card-intro">
+    <svg viewBox="0 0 120 120" width="92" height="92" style="margin:0 auto;display:block;" role="img" aria-label="かわいい子犬のキャラクター">
+      <ellipse cx="28" cy="40" rx="14" ry="20" fill="#E8A87C"/>
+      <ellipse cx="92" cy="40" rx="14" ry="20" fill="#E8A87C"/>
+      <circle cx="60" cy="60" r="38" fill="#F5D9C4"/>
+      <ellipse cx="60" cy="72" rx="22" ry="18" fill="#FBEEE2"/>
+      <circle cx="46" cy="54" r="6" fill="#3d2b1f"/>
+      <circle cx="74" cy="54" r="6" fill="#3d2b1f"/>
+      <circle cx="48" cy="52" r="2" fill="#fff"/>
+      <circle cx="76" cy="52" r="2" fill="#fff"/>
+      <ellipse cx="38" cy="64" rx="6" ry="4" fill="#F4A6BE" opacity="0.7"/>
+      <ellipse cx="82" cy="64" rx="6" ry="4" fill="#F4A6BE" opacity="0.7"/>
+      <ellipse cx="60" cy="64" rx="5" ry="3.5" fill="#3d2b1f"/>
+      <path d="M60 67 Q60 73 54 74 M60 67 Q60 73 66 74" stroke="#3d2b1f" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M44 12 Q48 4 56 10 L52 18 Z" fill="#F4A6BE"/>
+      <path d="M76 12 Q72 4 64 10 L68 18 Z" fill="#F4A6BE"/>
+    </svg>
+    <div class="badge">かんたん10問・約1分で診断</div>
+    <div class="title">わたしに向いてる<br>お店はどこ？診断♡</div>
+    <p class="lead">質問にこたえるだけ♡<br>ラウンジ / クラブ / コンカフェ / キャバ / ガルバ<br>あなたにピッタリのお店がわかる</p>
+    <button id="start" class="btn-main">診断スタート →</button>
+  </div>
+
+  <div id="quiz">
+    <div class="topbar">
+      <svg viewBox="0 0 60 60" width="42" height="42" style="flex-shrink:0;" role="img" aria-label="子犬">
+        <ellipse cx="14" cy="20" rx="7" ry="10" fill="#E8A87C"/>
+        <ellipse cx="46" cy="20" rx="7" ry="10" fill="#E8A87C"/>
+        <circle cx="30" cy="30" r="19" fill="#F5D9C4"/>
+        <ellipse cx="30" cy="36" rx="11" ry="9" fill="#FBEEE2"/>
+        <circle cx="23" cy="27" r="3" fill="#3d2b1f"/>
+        <circle cx="37" cy="27" r="3" fill="#3d2b1f"/>
+        <ellipse cx="30" cy="32" rx="2.5" ry="1.8" fill="#3d2b1f"/>
+        <ellipse cx="19" cy="32" rx="3" ry="2" fill="#F4A6BE" opacity="0.7"/>
+        <ellipse cx="41" cy="32" rx="3" ry="2" fill="#F4A6BE" opacity="0.7"/>
+      </svg>
+      <div class="progress"><div id="bar"></div></div>
+      <div id="counter" class="counter">1/10</div>
+    </div>
+    <div id="qtext" class="qtext"></div>
+    <div id="opts" class="opts"></div>
+  </div>
+
+  <div id="result"></div>
+</div>
+
+<script>
+(function(){
+  /* ===== LINE誘導URL（ここを変えれば差し替え可能） ===== */
+  var LINE_URL = "https://line.me/ti/p/HfbvZYX3nx";
+
+  var T={
+    lounge:{name:"ラウンジ",icon:"🥂",emoji:"清楚エレガント系",desc:"私服ワンピで自然体、業務感ひかえめにゆるく接待するのが得意なあなた。清楚な雰囲気と聞き上手・気配り上手を活かせる、落ち着いた高級ラウンジ向きのタイプ。ガツガツせず長く続けやすい働き方が合ってます。"},
+    club:{name:"クラブ",icon:"👑",emoji:"格式ハイクラス系",desc:"上品さと品格で勝負できるあなた。ドレスをまとって会員制の高級クラブで、格の高いお客様を相手にする最上級の接待向きタイプ。ママ文化のある世界で、本物の気品と会話力を磨いて長く稼げる人に最適。"},
+    concafe:{name:"コンカフェ",icon:"💕",emoji:"きゅん♡推され系",desc:"明るくて世界観に入りこむのが好きなあなた。コンセプトカフェで「キャラ」やかわいい衣装を楽しめる、エンタメ寄りのタイプ。お酒より雰囲気重視・推されるのが好きな人にぴったり。"},
+    cabakura:{name:"キャバクラ",icon:"💎",emoji:"華やか稼ぎたい系",desc:"盛り上げ上手で野心もあるあなた。指名・売上をしっかり取りにいける、王道キャバ向きのタイプ。トーク力と華やかさで一気に稼ぎたい人に最適。"},
+    girlsbar:{name:"ガールズバー",icon:"🍺",emoji:"ゆるカジ楽しい系",desc:"カウンター越しのフランクな会話が得意なあなた。私服OK・ノルマゆるめのガールズバーで、肩の力を抜いて楽しく働けるタイプ。掛け持ちや副業ともめっちゃ相性◎。"}
+  };
+  var Q=[
+    {q:"接客するとき、どっちがしっくりくる？",a:[["落ち着いて上品に会話",["lounge","club"]],["キャラになりきって盛り上げ",["concafe"]],["指名とって距離つめる",["cabakura"]],["カウンターで気軽にトーク",["girlsbar"]]]},
+    {q:"服装はどれがいい？",a:[["私服ワンピ・きれいめ清楚",["lounge"]],["きちんとしたドレス",["club","cabakura"]],["セクシードレス",["cabakura"]],["かわいい衣装・コンセプト系",["concafe","girlsbar"]]]},
+    {q:"どんな雰囲気のお店がいい？",a:[["ゆるく接待・業務感ひかえめ",["lounge"]],["会員制で格式高い",["club"]],["華やかでにぎやか",["cabakura"]],["カジュアル・友達感覚",["girlsbar"]],["世界観・かわいい",["concafe"]]]},
+    {q:"お酒はどのくらい飲める？",a:[["少し付き合う程度",["lounge","club"]],["ほぼ飲まなくてOKがいい",["concafe"]],["わりと飲める・盛れる",["cabakura"]],["気分でゆるく",["girlsbar"]]]},
+    {q:"稼ぎたい金額のイメージは？",a:[["安定して長く",["lounge"]],["最高クラスを目指したい",["club"]],["お小遣い+楽しさ",["concafe"]],["とにかくガッツリ",["cabakura"]],["ほどほど・掛け持ち",["girlsbar"]]]},
+    {q:"得意なコミュニケーションは？",a:[["聞き上手・落ち着き",["lounge","club"]],["かわいい・愛され",["concafe"]],["盛り上げ・押し",["cabakura"]],["フランク・タメ口寄り",["girlsbar"]]]},
+    {q:"理想の客層は？",a:[["上品な大人",["lounge"]],["経営者・VIP層",["club"]],["優しい推し活勢",["concafe"]],["ノリのいい太客",["cabakura"]],["近所の常連・友達感覚",["girlsbar"]]]},
+    {q:"シフトはどのくらい入りたい？",a:[["週3〜4・週4〜5でしっかり",["cabakura","club"]],["週2〜3でほどほど",["lounge","concafe"]],["週1〜2でゆるっと",["girlsbar","concafe"]]]},
+    {q:"メイク・見た目の方向性は？",a:[["モリモリ・ギャル・派手め",["cabakura","concafe"]],["ナチュラル・かわいい",["girlsbar","concafe"]],["清楚・上品",["lounge","club"]]]},
+    {q:"ノルマや営業はどう感じる？",a:[["なくてOK・自然体",["lounge"]],["品よくお客様と関係を作りたい",["club"]],["したくない",["concafe"]],["むしろ燃える",["cabakura"]],["ゆるい方がいい",["girlsbar"]]]},
+    {q:"お店で大事にしたいのは？",a:[["居心地と自然体",["lounge"]],["品格とステータス",["club"]],["世界観と楽しさ",["concafe"]],["売上と指名",["cabakura"]],["気楽さとノリ",["girlsbar"]]]}
+  ];
+  var i=0,sc={lounge:0,club:0,concafe:0,cabakura:0,girlsbar:0};
+  var intro=document.getElementById('intro'),quiz=document.getElementById('quiz'),res=document.getElementById('result');
+  var qt=document.getElementById('qtext'),op=document.getElementById('opts'),bar=document.getElementById('bar'),cnt=document.getElementById('counter');
+  document.getElementById('start').onclick=function(){intro.style.display='none';quiz.style.display='block';render();};
+  function render(){
+    var Qi=Q[i];qt.textContent=Qi.q;op.innerHTML='';
+    bar.style.width=Math.round((i+1)/Q.length*100)+'%';cnt.textContent=(i+1)+'/'+Q.length;
+    Qi.a.forEach(function(o){
+      var b=document.createElement('button');
+      b.className='opt';
+      b.textContent=o[0];
+      b.onclick=function(){o[1].forEach(function(k,idx){sc[k]+=(idx===0?1:0.6);});i++;if(i<Q.length){render();}else{show();}};
+      op.appendChild(b);
+    });
+  }
+  function show(){
+    quiz.style.display='none';res.style.display='block';
+    var best='lounge',mx=-1;
+    ['lounge','club','concafe','cabakura','girlsbar'].forEach(function(k){if(sc[k]>mx){mx=sc[k];best=k;}});
+    var t=T[best];
+    res.innerHTML='<div class="card-result">'+
+      '<svg viewBox="0 0 120 120" width="80" height="80" style="margin:0 auto 4px;display:block;" role="img" aria-label="子犬がお祝いしている">'+
+      '<ellipse cx="28" cy="40" rx="14" ry="20" fill="#E8A87C"/><ellipse cx="92" cy="40" rx="14" ry="20" fill="#E8A87C"/>'+
+      '<circle cx="60" cy="60" r="38" fill="#F5D9C4"/><ellipse cx="60" cy="72" rx="22" ry="18" fill="#FBEEE2"/>'+
+      '<path d="M40 50 Q46 44 52 50" stroke="#3d2b1f" stroke-width="3" fill="none" stroke-linecap="round"/>'+
+      '<path d="M68 50 Q74 44 80 50" stroke="#3d2b1f" stroke-width="3" fill="none" stroke-linecap="round"/>'+
+      '<ellipse cx="38" cy="64" rx="6" ry="4" fill="#F4A6BE" opacity="0.7"/><ellipse cx="82" cy="64" rx="6" ry="4" fill="#F4A6BE" opacity="0.7"/>'+
+      '<ellipse cx="60" cy="64" rx="5" ry="3.5" fill="#3d2b1f"/>'+
+      '<path d="M52 70 Q60 80 68 70" stroke="#3d2b1f" stroke-width="2.5" fill="none" stroke-linecap="round"/>'+
+      '<path d="M44 12 Q48 4 56 10 L52 18 Z" fill="#F4A6BE"/><path d="M76 12 Q72 4 64 10 L68 18 Z" fill="#F4A6BE"/></svg>'+
+      '<div class="label">YOUR TYPE</div>'+
+      '<div class="result-icon">'+t.icon+'</div>'+
+      '<div class="result-emoji">'+t.emoji+'</div>'+
+      '<div class="result-type">'+t.name+'タイプ</div>'+
+      '<div class="result-desc">'+t.desc+'</div>'+
+      '<a href="'+LINE_URL+'" class="btn-line" target="_blank" rel="noopener">LINEで相談してみる</a>'+
+      '<div class="line-note">あなたに合うお店、ぴったり紹介します♡<br>まずは気軽にメッセージしてね</div>'+
+      '<button id="again" class="btn-again">もう一回診断する</button>'+
+      '</div>';
+    document.getElementById('again').onclick=function(){i=0;sc={lounge:0,club:0,concafe:0,cabakura:0,girlsbar:0};res.style.display='none';res.innerHTML='';intro.style.display='block';window.scrollTo(0,0);};
+    window.scrollTo(0,0);
+  }
+})();
+</script>
+</body>
+</html>
